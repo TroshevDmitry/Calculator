@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"runtime"
 	"strconv"
 	"strings"
 
@@ -27,7 +28,14 @@ func main() {
 }
 
 func calculate(expression string) (string, error) {
-	expression = strings.TrimSuffix(expression, "\r\n")
+
+	var os_string_eof_suffix string = "\n"
+
+	if runtime.GOOS == "windows" {
+		os_string_eof_suffix = "\r\n"
+	}
+
+	expression = strings.TrimSuffix(expression, os_string_eof_suffix)
 
 	tokens := strings.Split(expression, " ")
 	if len(tokens) != 3 {
